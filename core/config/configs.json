@@ -1,0 +1,9 @@
+{
+    "app": {
+        "host": "localhost",
+        "port": 8000
+    },
+    "db": {
+        "type": "sqlite"
+    }
+}
