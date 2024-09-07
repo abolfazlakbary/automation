@@ -1,7 +1,5 @@
 import json
-import argparse
 import requests
-from bs4 import BeautifulSoup
 import re
 import platform
 from pathlib import Path
@@ -33,6 +31,9 @@ def read_subenum_script():
 config_data = get_configs()
 subenum = read_subenum_script()
 
+
+
+### This part must become an API for proccessing SubEnum file output
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.5249.62 Safari/537.36"
 
 session = requests.Session()
