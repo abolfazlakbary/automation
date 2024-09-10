@@ -24,3 +24,12 @@ async def func_get_subenum_info():
 async def func_search_with_subenum(domain: str):
     data = await controller.subenum_search(domain)
     return SuccessResponse.show(data=data)
+
+
+@recon_router.get(
+    "/subenum/process",
+    summary="checks output of SubEnum"
+)
+async def func_subenum_process(domain: str):
+    data = await controller.subenum_process(domain)
+    return SuccessResponse.show(data=data)

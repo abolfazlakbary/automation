@@ -19,19 +19,14 @@ def get_configs():
         data = json.load(file)
     return data
 
-def read_subenum_script():
+def read_script(script_dir: str, script_name: str):
     script_path = Path(__file__).resolve()
     core_root = script_path.parent.parent.__str__()
     if platform.system() == "Windows":
-        file_path = core_root + '\\scripts\\subenum\\subenum.sh'
+        file_path = core_root + f'\\scripts\\{script_dir}\\{script_name}.sh'
     elif platform.system() == "Linux":
-        file_path = core_root + '/scripts/subenum/subenum.sh'
+        file_path = core_root + f'/scripts/{script_dir}/{script_name}.sh'
     return file_path
-
-config_data = get_configs()
-subenum = read_subenum_script()
-
-
 
 ### This part must become an API for proccessing SubEnum file output
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.5249.62 Safari/537.36"
@@ -72,3 +67,6 @@ def read_urls_from_file(file_path):
     with open(file_path, 'r') as file:
         urls = [line.strip() for line in file if line.strip()]
     return urls
+
+
+config_data = get_configs()
