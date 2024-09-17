@@ -3,7 +3,8 @@ import requests
 import re
 import platform
 from pathlib import Path
-
+import asyncio
+from core.exceptions.exc import ProccessFailedException
 
 def get_configs():
     script_path = Path(__file__).resolve()
@@ -67,6 +68,20 @@ def read_urls_from_file(file_path):
     with open(file_path, 'r') as file:
         urls = [line.strip() for line in file if line.strip()]
     return urls
+
+
+async def get_proccess_result(process, timeout=120) -> dict:
+    try:
+        stdout, stderr = await asyncio.wait_for(process.communicate(), timeout=timeout)
+    except asyncio.exceptions.TimeoutError:
+        raise ProccessFailedException("No Response from server")
+    
+    stderr_str = stderr.decode() if stderr else ''
+    stdout_str = stdout.decode() if stdout else ''
+    return {
+        "stderr_str": stderr_str,
+        "stdout_str": stdout_str
+    }
 
 
 config_data = get_configs()

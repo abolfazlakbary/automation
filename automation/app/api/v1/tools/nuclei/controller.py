@@ -1,6 +1,7 @@
-import subprocess
+from core.utils.utils import get_proccess_result
 import re
 from core.exceptions.exc import NotFoundException
+import asyncio
 
 
 class NucleiController:
@@ -8,9 +9,14 @@ class NucleiController:
     async def get_nuclei_version():
 
         # Get the nuclei version
-        output = subprocess.run(["nuclei", "-version"], capture_output=True).__dict__["stderr"]
-        decoded_output = output.decode('utf-8')
-        match = re.search(r'Nuclei Engine Version: ([\w.]+)', decoded_output)
+        process = await asyncio.create_subprocess_exec(
+            "nuclei", "-version",
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
+        )
+        process_result = await get_proccess_result(process)
+        
+        match = re.search(r'Nuclei Engine Version: ([\w.]+)', process_result["stderr_str"])
         if match:
             version = match.group(0)
 
@@ -24,9 +30,14 @@ class NucleiController:
 
     @staticmethod
     async def scan_url(url: str):
-        output = subprocess.run(["nuclei", "-u", url], capture_output=True).__dict__["stderr"]
-        decoded_output = output.decode('utf-8')
+        process = await asyncio.create_subprocess_exec(
+        'nuclei', '-u', url,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE
+        )
+        process_result = await get_proccess_result(process)
+
         return {
-            "data": decoded_output
+            "data": process_result["stderr_str"]
         }
 

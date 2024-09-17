@@ -7,13 +7,15 @@ from fastapi import status
 class Validate:
 
     @staticmethod
-    async def validate(db: AsyncSession, form_data: dict, record_id: int | None = None):
+    async def validate(form_data: dict, db=None, record_id: int | None = None):
         errors = {}
         if hasattr(form_data, "create_validation"):
-            errors = await form_data.create_validation(db, errors)
+            errors = await form_data.create_validation(errors, db)
         elif hasattr(form_data, "update_validation"):
-            errors = await form_data.update_validation(db, errors, record_id)
-            
+            errors = await form_data.update_validation(errors, db, record_id)
+        elif hasattr(form_data, "custom_validation"): 
+            errors = await form_data.custom_validation(errors, db, record_id)
+
         if errors != {}:
             raise BadRequestException(errors=errors)
 
