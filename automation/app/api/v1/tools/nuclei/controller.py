@@ -43,7 +43,7 @@ class NucleiController:
         stderr=asyncio.subprocess.PIPE
         )
         
-        process_result = await get_proccess_result(process, timeout=configs["packages"]["nuclei"]["timeout"])
+        process_result = await get_proccess_result(process, timeout=configs["packages"]["nuclei"]["request_timeout"])
         stderr = operate.remove_big_nuclei(process_result["stderr_str"])
         stdout = process_result["stdout_str"]
         
