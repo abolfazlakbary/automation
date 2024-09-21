@@ -1,9 +1,14 @@
 {
     "app": {
-        "host": "127.0.0.1",
-        "port": 8000
+        "host": "",
+        "port": 0
     },
     "db": {
-        "type": "sqlite"
+        "type": ""
+    },
+    "packages": {
+        "nuclei": {
+            "timeout": 0
+        }
     }
 }
