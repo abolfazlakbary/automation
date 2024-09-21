@@ -8,7 +8,10 @@
     },
     "packages": {
         "nuclei": {
-            "timeout": 2000
+            "request_timeout": 0
+        },
+        "subenum": {
+            "request_timeout": 0
         }
     }
 }

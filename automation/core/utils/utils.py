@@ -19,7 +19,7 @@ def get_configs():
 def read_script(script_dir: str, script_name: str):
     script_path = Path(__file__).resolve()
     core_root = script_path.parent.parent.__str__()
-    file_path = os.path.join(core_root + f"scripts/{script_dir}/{script_name}.sh")
+    file_path = os.path.join(core_root, f"scripts/{script_dir}/{script_name}.sh")
     return file_path
 
 ### This part must become an API for proccessing SubEnum file output
