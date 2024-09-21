@@ -5,17 +5,13 @@ import platform
 from pathlib import Path
 import asyncio
 from core.exceptions.exc import ProccessFailedException
+import os
 
 def get_configs():
     script_path = Path(__file__).resolve()
     core_root = script_path.parent.parent.__str__()
-    if platform.system() == "Windows":
-        file_path = core_root + '\\config\\configs.json'
-    elif platform.system() == "Linux":
-        file_path = core_root + '/config/configs.json'
-    else:
-        raise SystemError()
-    
+    file_path = os.path.join(core_root, "config/configs.json")
+
     with open(file_path, 'r') as file:
         data = json.load(file)
     return data
@@ -23,10 +19,7 @@ def get_configs():
 def read_script(script_dir: str, script_name: str):
     script_path = Path(__file__).resolve()
     core_root = script_path.parent.parent.__str__()
-    if platform.system() == "Windows":
-        file_path = core_root + f'\\scripts\\{script_dir}\\{script_name}.sh'
-    elif platform.system() == "Linux":
-        file_path = core_root + f'/scripts/{script_dir}/{script_name}.sh'
+    file_path = os.path.join(core_root + f"scripts/{script_dir}/{script_name}.sh")
     return file_path
 
 ### This part must become an API for proccessing SubEnum file output

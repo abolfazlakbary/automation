@@ -5,5 +5,10 @@
     },
     "db": {
         "type": "sqlite"
+    },
+    "packages": {
+        "nuclei": {
+            "timeout": 2000
+        }
     }
 }

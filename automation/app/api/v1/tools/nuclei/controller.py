@@ -2,6 +2,11 @@ from core.utils.utils import get_proccess_result
 import re
 from core.exceptions.exc import NotFoundException
 import asyncio
+from core.utils import utils
+from .operations.operate import NucleiOperations
+
+
+operate = NucleiOperations()
 
 
 class NucleiController:
@@ -10,7 +15,7 @@ class NucleiController:
 
         # Get the nuclei version
         process = await asyncio.create_subprocess_exec(
-            "nuclei", "-version",
+            "nuclei", "-version", "-silent",
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE
         )
@@ -30,14 +35,20 @@ class NucleiController:
 
     @staticmethod
     async def scan_url(url: str):
+        configs = utils.get_configs()
+        
         process = await asyncio.create_subprocess_exec(
-        'nuclei', '-u', url,
+        'nuclei', '-u', url, "-nc",
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE
         )
-        process_result = await get_proccess_result(process)
-
+        
+        process_result = await get_proccess_result(process, timeout=configs["packages"]["nuclei"]["timeout"])
+        stderr = operate.remove_big_nuclei(process_result["stderr_str"])
+        stdout = process_result["stdout_str"]
+        
         return {
-            "data": process_result["stderr_str"]
+            "stderr": stderr,
+            "stdout": stdout
         }
 
