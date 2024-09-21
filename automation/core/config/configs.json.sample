@@ -1,14 +1,14 @@
 {
     "app": {
-        "host": "",
-        "port": 0
+        "host": "15.204.246.162",
+        "port": 1256
     },
     "db": {
-        "type": ""
+        "type": "sqlite"
     },
     "packages": {
         "nuclei": {
-            "timeout": 0
+            "timeout": 2000
         }
     }
 }
