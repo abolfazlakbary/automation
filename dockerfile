@@ -30,7 +30,9 @@ WORKDIR /app
 COPY automation/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY automation/ .
-RUN mkdir -p files && mkdir -p files/subenum && mkdir -p files/nuclei
+RUN mkdir -p files && \
+    mkdir -p files/subenum && \
+    mkdir -p files/nuclei
 
 # Expose desired port
 EXPOSE 1256
