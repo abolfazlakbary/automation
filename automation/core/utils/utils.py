@@ -67,7 +67,12 @@ def read_urls_from_file(file_path):
     return urls
 
 
-async def get_proccess_result(process, timeout=120) -> dict:
+async def get_proccess_result(args: list[str], timeout: int=120) -> dict:
+    process = await asyncio.create_subprocess_exec(
+            *args,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
+        )
     try:
         stdout, stderr = await asyncio.wait_for(process.communicate(), timeout=timeout)
     except asyncio.exceptions.TimeoutError:
@@ -75,10 +80,4 @@ async def get_proccess_result(process, timeout=120) -> dict:
     
     stderr_str = stderr.decode() if stderr else ''
     stdout_str = stdout.decode() if stdout else ''
-    return {
-        "stderr_str": stderr_str,
-        "stdout_str": stdout_str
-    }
-
-
-config_data = get_configs()
+    return stdout_str, stderr_str

@@ -1,4 +1,4 @@
-from core.utils.utils import get_proccess_result, get_app_path
+from core.utils.utils import get_proccess_result, get_app_path, get_configs
 import re
 from core.exceptions.exc import NotFoundException, ProccessFailedException
 import asyncio
@@ -17,14 +17,10 @@ class NucleiController:
     async def get_nuclei_version():
 
         # Get the nuclei version
-        process = await asyncio.create_subprocess_exec(
-            "nuclei", "-version", "-silent",
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
-        )
-        process_result = await get_proccess_result(process)
+        command_1 = ["nuclei", "-version", "-silent"] # See version
+        output_1, error_1 = await get_proccess_result(command_1)
         
-        match = re.search(r'Nuclei Engine Version: ([\w.]+)', process_result["stderr_str"])
+        match = re.search(r'Nuclei Engine Version: ([\w.]+)', error_1)
         if match:
             version = match.group(0)
 
@@ -38,39 +34,29 @@ class NucleiController:
 
     @staticmethod
     async def scan_url(url: str):
-        configs = utils.get_configs()
-
-        nuclei_files_dir = os.path.join(get_app_path(), "files/nuclei")
+        config_data = get_configs()
+        request_timeout = config_data["packages"]["nuclei"]["request_timeout"]
+        
+        # 0 - make a random path for the file
+        file_path = operate.get_nuclei_path_file()
+        
+        # 1 - Request the desired url for scan
+        command_1 = ['nuclei', '-u', url, "-nc", "-json-export", file_path]
+        output_1, error_1 = await get_proccess_result(command_1, request_timeout)
     
-        random_str = operate.get_random_string(10)
-        filename = f"{random_str}_{date.today()}.json"
-        file_path = os.path.join(nuclei_files_dir, filename)
+        # 2 - Get Json data
+        command_2 = ["cat", file_path]
+        output_2, error_2 = await get_proccess_result(command_2, request_timeout)
         
-        process_1 = await asyncio.create_subprocess_exec(
-        'nuclei', '-u', url, "-nc", "-json-export", f"{file_path}",
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE
-        )
-        
-        await get_proccess_result(process_1, timeout=configs["packages"]["nuclei"]["request_timeout"])
-        process_2 = await asyncio.create_subprocess_exec(
-        "cat", f"{file_path}",
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE
-        )
-        json_data = await get_proccess_result(process_2, timeout=configs["packages"]["nuclei"]["request_timeout"])
+        # 3 - Try to load json data
         try:
-            standard_json = json.loads(json_data["stdout_str"])
-        except Exception as e:
-            print({"json_data": json_data})
-            print(e)
+            standard_json = json.loads(output_2)
+        except:
             raise ProccessFailedException("There was an error in loading json data")
         
-        process_3 = await asyncio.create_subprocess_exec(
-            "rm", f"{file_path}",
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
-        )
-        await get_proccess_result(process_3, timeout=configs["packages"]["nuclei"]["request_timeout"])
+        # 4 - Remove the file
+        command_3 = ["rm", file_path]
+        output_3, error_3 = await get_proccess_result(command_3, request_timeout)
+        
         return standard_json
 

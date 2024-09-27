@@ -3,10 +3,11 @@ from sqlalchemy.orm import declarative_base
 import os
 from typing import Annotated
 from fastapi import Depends
-from core.utils.utils import config_data
+from core.utils.utils import get_configs
 
 
 Base = declarative_base()
+config_data = get_configs()
 
 
 match config_data["db"]["type"]:
