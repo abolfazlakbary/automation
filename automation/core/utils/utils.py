@@ -16,6 +16,10 @@ def get_configs():
         data = json.load(file)
     return data
 
+def get_app_path():
+    utils_path = Path(__file__).resolve()
+    return utils_path.parent.parent.parent.__str__()
+
 def read_script(script_dir: str, script_name: str):
     script_path = Path(__file__).resolve()
     core_root = script_path.parent.parent.__str__()
