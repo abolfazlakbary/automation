@@ -3,6 +3,7 @@ from .controller import NucleiController
 from core.schema.response import SuccessResponse
 from core.schema.validate import Validate
 from .schema.request import NucleiRequest
+from fastapi import Response
 
 
 nuclei_router = APIRouter(prefix="/nuclei", tags=["Nuclei"])

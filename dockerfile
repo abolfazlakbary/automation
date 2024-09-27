@@ -1,3 +1,4 @@
+# Base installation
 FROM python:3.12
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -22,24 +23,14 @@ RUN nuclei -ut
 RUN git clone https://github.com/bing0o/SubEnum.git && \
     cd SubEnum && \
     chmod +x setup.sh && \
-    ./setup.sh && \
-    rm -rf SubEnum
+    ./setup.sh# Base installation
 
 # Initilization of project codes
 WORKDIR /app
 COPY automation/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY automation/ .
-RUN cp core/config/configs.json.sample core/config/configs.json
-
-# Expose desired port
-EXPOSE 1256
-
-# Initilization of project codes
-WORKDIR /app
-COPY automation/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-COPY automation/ .
+RUN mkdir -p files && mkdir -p files/subenum && mkdir -p files/nuclei
 
 # Expose desired port
 EXPOSE 1256
