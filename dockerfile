@@ -23,13 +23,14 @@ RUN nuclei -ut
 RUN git clone https://github.com/bing0o/SubEnum.git && \
     cd SubEnum && \
     chmod +x setup.sh && \
-    ./setup.sh# Base installation
+    ./setup.sh
 
 # Initilization of project codes
 WORKDIR /app
 COPY automation/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY automation/ .
+COPY core/config/configs.json.sample core/config/configs.json
 RUN mkdir -p files && \
     mkdir -p files/subenum && \
     mkdir -p files/nuclei
