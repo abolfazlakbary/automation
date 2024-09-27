@@ -30,7 +30,7 @@ WORKDIR /app
 COPY automation/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY automation/ .
-COPY core/config/configs.json.sample core/config/configs.json
+COPY automation/core/config/configs.json.sample ./core/config/configs.json
 RUN mkdir -p files && \
     mkdir -p files/subenum && \
     mkdir -p files/nuclei
