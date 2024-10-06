@@ -6,8 +6,7 @@ from fastapi.responses import JSONResponse
 from core.exceptions.base import CustomException
 from core.schema.validate import transform_pydantic_errors
 from fastapi.exceptions import RequestValidationError
-
-
+from fastapi.middleware.cors import CORSMiddleware
 
 
 @app.exception_handler(CustomException)
@@ -29,7 +28,13 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         content=transformed_errors,
     )
 
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 async def run_server():
