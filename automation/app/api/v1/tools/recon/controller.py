@@ -1,7 +1,7 @@
 import subprocess
 from core.utils.utils import read_script, get_configs
 import asyncio
-from core.utils.utils import get_proccess_result
+from core.utils.utils import get_proccess_result , get_proccess_result_shell
 
 class ReconController:
     @staticmethod
@@ -20,17 +20,10 @@ class ReconController:
         configs = get_configs()
         subenum = read_script(script_dir="subenum", script_name="subenum")
 
-        process = await asyncio.create_subprocess_exec(
-        "bash", subenum, "-d", domain, 
-        "-o", f"./files/subenum/{domain}.txt",
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE
-        )
-        
-        process_result = await get_proccess_result(process, timeout=configs["packages"]["subenum"]["request_timeout"])
-        stdout = process_result["stdout_str"]
-        stderr = process_result["stderr_str"]
-        
+        command = f"{subenum} -d {domain} -o {domain} && cat {domain} |dir |sort -u > dir && python3 paramminer.py dir output"
+
+        stderr, stdout = await get_proccess_result_shell(command, timeout=configs["packages"]["subenum"]["request_timeout"])
+
         return {
             "stderr": stderr,
             "stdout": stdout

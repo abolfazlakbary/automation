@@ -81,3 +81,19 @@ async def get_proccess_result(args: list[str], timeout: int=120) -> dict:
     stderr_str = stderr.decode() if stderr else ''
     stdout_str = stdout.decode() if stdout else ''
     return stdout_str, stderr_str
+
+
+async def get_proccess_result_shell(command: str, timeout: int=120) -> dict:
+    process = await asyncio.create_subprocess_shell(
+            command,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
+        )
+    try:
+        stdout, stderr = await asyncio.wait_for(process.communicate(), timeout=timeout)
+    except asyncio.exceptions.TimeoutError:
+        raise ProccessFailedException("No Response from server")
+
+    stderr_str = stderr.decode() if stderr else ''
+    stdout_str = stdout.decode() if stdout else ''
+    return stdout_str, stderr_str
