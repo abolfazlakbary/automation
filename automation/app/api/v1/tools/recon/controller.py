@@ -6,19 +6,11 @@ from core.utils.utils import get_proccess_result
 class ReconController:
     @staticmethod
     async def get_subenum_info():
-        configs = get_configs()
         subenum = read_script(script_dir="subenum", script_name="subenum")
-        
-        process = await asyncio.create_subprocess_exec(
-        "bash", subenum, "-v",
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE
-        )
-        
-        process_result = await get_proccess_result(process, timeout=configs["packages"]["subenum"]["request_timeout"])
-        stdout = process_result["stdout_str"]
-        version = stdout.split("Version: ")[1].split("\n")[0]
-        
+        command_1 = ["bash", subenum, "-v"]
+        output_1, error_1 = await get_proccess_result(command_1)
+        version = output_1.split("Version: ")[1].split("\n")[0]
+
         return {
             "Version": version
         }
