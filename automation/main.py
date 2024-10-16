@@ -11,7 +11,9 @@ async def main():
     config = uvicorn.Config(
         app=app,
         host=config_data["app"]["host"],
-        port=config_data["app"]["port"]
+        port=config_data["app"]["port"],
+        ssl_keyfile="./core/certs/keyfile.key",
+        ssl_certfile="./core/certs/certfile.crt"
     )
     server = uvicorn.Server(config)
     await server.serve()
