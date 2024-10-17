@@ -1,0 +1,6 @@
+http://wide.ir/
+http://wide.ir/ForgotPassword.aspx
+http://wide.ir/robots.txt
+http://wide.ir/SelectProduct.aspx
+http://wide.ir/signin.aspx
+http://wide.ir/SignIn.aspx

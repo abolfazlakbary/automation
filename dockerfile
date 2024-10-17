@@ -25,6 +25,8 @@ RUN git clone https://github.com/bing0o/SubEnum.git && \
     chmod +x setup.sh && \
     ./setup.sh# Base installation \
     go install github.com/lc/gau/v2/cmd/gau@latest \
+    go install github.com/tomnomnom/waybackurls@latest \
+    go install github.com/projectdiscovery/katana/cmd/katana@latest \
     source ~/.bashrc
 
 
