@@ -23,7 +23,10 @@ RUN nuclei -ut
 RUN git clone https://github.com/bing0o/SubEnum.git && \
     cd SubEnum && \
     chmod +x setup.sh && \
-    ./setup.sh# Base installation
+    ./setup.sh# Base installation \
+    go install github.com/lc/gau/v2/cmd/gau@latest \
+    source ~/.bashrc
+
 
 # Initilization of project codes
 WORKDIR /app
