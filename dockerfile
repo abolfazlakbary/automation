@@ -24,6 +24,8 @@ RUN git clone https://github.com/bing0o/SubEnum.git && \
     cd SubEnum && \
     chmod +x setup.sh && \
     ./setup.sh# Base installation \
+    go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest \
+    go install github.com/tomnomnom/unfurl@latest \
     go install github.com/lc/gau/v2/cmd/gau@latest \
     go install github.com/tomnomnom/waybackurls@latest \
     go install github.com/projectdiscovery/katana/cmd/katana@latest \
